@@ -1,0 +1,31 @@
+.floor {
+  border: solid 5px gray;
+  z-index: 1;
+  height: 80px;
+  width: 300px;
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  gap: 5px;
+}
+
+.building-container {
+  height: fit-content;
+  width: fit-content;
+  background-color: rgb(43, 46, 46);
+}
+.floors-container {
+  display: flex;
+  flex-direction: column-reverse;
+}
+.elevator-states {
+  display: flex;
+  flex-direction: column;
+  color: white;
+  font-size: 8px;
+  gap: 2px;
+}
+.state-container {
+  display: flex;
+  align-items: center;
+}
