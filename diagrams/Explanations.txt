@@ -1,0 +1,36 @@
+demo video: https://watch.screencastify.com/v/WKBYAgdFYesS5jbNqJxY
+Internal request=Request made from inside the elevator
+External request=Request made from one of the floors buttons
+
+Communication:
+	-client -> server: done through htpp requests
+	-server -> client: done through server side events
+
+Client:
+	using fetchEventSource we listen to messages from the server that tell is if the state or the current floor of an elevator has changed
+
+Server:
+
+Elevator class logic:
+	-extends the class Thread
+	-when first started it has no floor requests to process so it calls wait(), leaving it hanging until someone notifies the current 	 thread of new requests
+        -when it is notified the thread wakes up and begins to process the first request in the queue
+	-the elevator moves only by one floor and then it calls Thread.sleep(1000) to simmulate passing time
+	-when the current floor of the elevator or the state(UP,DOWN,WAITING,ARRIVED) is changed it fires an event using PropertyChangeSupport notifying the service that the elevator has moved
+	-when all the requests are processed wait is called again
+
+BuildingService class logic:
+	-building Service has two elevators A and B
+	-when the service is created both threads(A and B) start
+	-using PropertyChangeListener the service listens for when elevators change their current floor and using a SssEmitter sends the message to all the listeners
+	-when an internal request is added to an elevator that request is added to the queue of the respective elevator and the elevator is notified that it can stop waiting
+	-when an external request is made: 
+		-if both elevators are avaible we add the request to the queue of the one that is closer, or the one that is lower in the 		 case of equality
+		-if one elevator is busy we pass that request to the one that is avaible
+		-if both are busy we compare their destinations and we pass the request to the one that has the destination closer
+ServerSideEventsController logic:
+	-has only one get method that returns a SseEmitter 
+
+BuildingController logic:
+	-two post methods: one for adding an internal request and one for an external request
+ 	
